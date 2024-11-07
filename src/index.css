@@ -261,6 +261,7 @@ i {
 #contact {
   max-width: 40rem;
   display: flex;
+  gap: 32px;
 }
 
 #contact h1 {
@@ -297,9 +298,12 @@ i {
   width: 12rem;
   height: 12rem;
   background: #c8c8c8;
-  margin-right: 2rem;
   border-radius: 1.5rem;
   object-fit: cover;
+}
+
+#contact > div:first-of-type {
+  flex-shrink: 0;
 }
 
 #contact h1 ~ div {

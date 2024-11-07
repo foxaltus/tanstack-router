@@ -1,6 +1,6 @@
 import * as React from "react";
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { getContact } from "../contacts";
+import { createFileRoute, notFound, useRouter } from "@tanstack/react-router";
+import { Contact, getContact, updateContact } from "../contacts";
 
 export const Route = createFileRoute("/contacts_/$contactId/edit")({
   component: RouteComponent,
@@ -13,9 +13,20 @@ export const Route = createFileRoute("/contacts_/$contactId/edit")({
 
 function RouteComponent() {
   const contact = Route.useLoaderData();
-
+  const router = useRouter();
   return (
-    <form method="post" id="contact-form">
+    <form
+      method="post"
+      id="contact-form"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const updates = Object.fromEntries(formData) as unknown as Contact;
+        await updateContact(contact.id, updates);
+        router.invalidate();
+        router.navigate({ to: "..", from: Route.fullPath });
+      }}
+    >
       <p>
         <span>Name</span>
         <input
