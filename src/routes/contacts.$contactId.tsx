@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { Contact, getContact } from "../contacts";
 
 export const Route = createFileRoute("/contacts/$contactId")({
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/contacts/$contactId")({
 
 function RouteComponent() {
   const contact = Route.useLoaderData();
+  const navigate = useNavigate();
   return (
     <div id="contact">
       <div>
@@ -48,7 +49,13 @@ function RouteComponent() {
         {contact.notes && <p>{contact.notes}</p>}
 
         <div>
-          <form action="edit">
+          <form
+            action="edit"
+            onSubmit={(e) => {
+              e.preventDefault();
+              navigate({ to: "edit", from: Route.fullPath });
+            }}
+          >
             <button type="submit">Edit</button>
           </form>
           <form
