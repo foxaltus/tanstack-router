@@ -1,22 +1,18 @@
 import * as React from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Contact } from "../contacts";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { Contact, getContact } from "../contacts";
 
 export const Route = createFileRoute("/contacts/$contactId")({
   component: RouteComponent,
+  loader: async ({ params }) => {
+    const contact = await getContact(params.contactId);
+    if (!contact) throw notFound();
+    return contact;
+  },
 });
 
-const contact = {
-  id: "0",
-  first: "Your",
-  last: "Name",
-  avatar: "https://robohash.org/you.png?size=200x200",
-  twitter: "your_handle",
-  notes: "Some notes",
-  favorite: true,
-} as const satisfies Contact;
-
 function RouteComponent() {
+  const contact = Route.useLoaderData();
   return (
     <div id="contact">
       <div>
