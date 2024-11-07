@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
@@ -30,10 +30,14 @@ export default function RootComponent() {
         <nav>
           <ul>
             <li>
-              <a href={`/contacts/1`}>Your Name</a>
+              <Link to="/contacts/$contactId" params={{ contactId: "1" }}>
+                Your Name
+              </Link>
             </li>
             <li>
-              <a href={`/contacts/2`}>Your Friend</a>
+              <Link to="/contacts/$contactId" params={{ contactId: "2" }}>
+                Your Friend
+              </Link>
             </li>
           </ul>
         </nav>
