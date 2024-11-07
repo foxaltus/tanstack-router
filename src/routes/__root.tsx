@@ -1,12 +1,22 @@
 import * as React from "react";
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  Link,
+  Outlet,
+  useRouter,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { createContact, getContacts } from "../contacts";
 
 export const Route = createRootRoute({
   component: RootComponent,
+  loader: () => getContacts(),
 });
 
 export default function RootComponent() {
+  const contacts = Route.useLoaderData();
+  const router = useRouter();
+
   return (
     <>
       <div id="sidebar">
@@ -23,23 +33,44 @@ export default function RootComponent() {
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
           </form>
-          <form method="post">
+          <form
+            method="post"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await createContact();
+              router.invalidate();
+            }}
+          >
             <button type="submit">New</button>
           </form>
         </div>
+
         <nav>
-          <ul>
-            <li>
-              <Link to="/contacts/$contactId" params={{ contactId: "1" }}>
-                Your Name
-              </Link>
-            </li>
-            <li>
-              <Link to="/contacts/$contactId" params={{ contactId: "2" }}>
-                Your Friend
-              </Link>
-            </li>
-          </ul>
+          {contacts.length ? (
+            <ul>
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <Link
+                    to="/contacts/$contactId"
+                    params={{ contactId: contact.id }}
+                  >
+                    {contact.first || contact.last ? (
+                      <>
+                        {contact.first} {contact.last}
+                      </>
+                    ) : (
+                      <i>No Name</i>
+                    )}{" "}
+                    {contact.favorite && <span>★</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <i>No contacts</i>
+            </p>
+          )}
         </nav>
       </div>
       <div id="detail">
