@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createRootRoute } from "@tanstack/react-router";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
@@ -38,7 +38,9 @@ export default function RootComponent() {
           </ul>
         </nav>
       </div>
-      <div id="detail"></div>
+      <div id="detail">
+        <Outlet />
+      </div>
       <TanStackRouterDevtools position="bottom-right" />
     </>
   );
