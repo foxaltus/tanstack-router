@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound, useRouter } from "@tanstack/react-router";
 import { Contact, deleteContact, getContact } from "../contacts";
 
 export const Route = createFileRoute("/contacts/$contactId")({
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/contacts/$contactId")({
 
 function RouteComponent() {
   const contact = Route.useLoaderData();
-  const navigate = useNavigate();
+  const router = useRouter();
   return (
     <div id="contact">
       <div>
@@ -53,7 +53,7 @@ function RouteComponent() {
             action="edit"
             onSubmit={(e) => {
               e.preventDefault();
-              navigate({ to: "edit", from: Route.fullPath });
+              router.navigate({ to: "edit", from: Route.fullPath });
             }}
           >
             <button type="submit">Edit</button>
@@ -66,8 +66,9 @@ function RouteComponent() {
               if (!confirm("Please confirm you want to delete this record."))
                 return;
               await deleteContact(contact.id);
+              router.invalidate();
               // @ts-expect-error hold on, we'll be adding the index route soon
-              navigate({ to: "/" });
+              router.navigate({ to: "/" });
             }}
           >
             <button type="submit">Delete</button>
