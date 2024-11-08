@@ -36,6 +36,8 @@ export default function RootComponent() {
     input.value = q ?? "";
   }, [q]);
 
+  const searching = status === "pending" && !!q?.length;
+
   return (
     <>
       <div id="sidebar">
@@ -55,11 +57,12 @@ export default function RootComponent() {
               type="search"
               name="q"
               defaultValue={q}
+              className={searching ? "loading" : ""}
               onChange={(e) => {
                 router.navigate({ to: ".", search: { q: e.target.value } });
               }}
             />
-            <div id="search-spinner" aria-hidden hidden={true} />
+            <div id="search-spinner" aria-hidden hidden={!searching} />
             <div className="sr-only" aria-live="polite"></div>
           </form>
           <form
