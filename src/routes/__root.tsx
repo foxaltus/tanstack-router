@@ -9,9 +9,19 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { createContact, getContacts } from "../contacts";
 
+type SearchParams = {
+  q?: string;
+};
+
 export const Route = createRootRoute({
   component: RootComponent,
-  loader: () => getContacts(),
+  validateSearch: (search): SearchParams => ({
+    q: search.q?.toString(),
+  }),
+  loaderDeps: ({ search }) => ({
+    q: search.q,
+  }),
+  loader: ({ deps }) => getContacts(deps.q),
 });
 
 export default function RootComponent() {
@@ -24,7 +34,15 @@ export default function RootComponent() {
       <div id="sidebar">
         <h1>TanStack Router Contacts</h1>
         <div>
-          <form id="search-form" role="search">
+          <form
+            id="search-form"
+            role="search"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const q = new FormData(e.currentTarget).get("q") as string;
+              router.navigate({ to: ".", search: { q } });
+            }}
+          >
             <input
               id="q"
               aria-label="Search contacts"
