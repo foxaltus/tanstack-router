@@ -4,6 +4,7 @@ import {
   Link,
   Outlet,
   useRouter,
+  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { createContact, getContacts } from "../contacts";
@@ -16,6 +17,7 @@ export const Route = createRootRoute({
 export default function RootComponent() {
   const contacts = Route.useLoaderData();
   const router = useRouter();
+  const { status } = useRouterState();
 
   return (
     <>
@@ -80,7 +82,7 @@ export default function RootComponent() {
           )}
         </nav>
       </div>
-      <div id="detail">
+      <div id="detail" className={status === "pending" ? "loading" : ""}>
         <Outlet />
       </div>
       <TanStackRouterDevtools position="bottom-right" />
