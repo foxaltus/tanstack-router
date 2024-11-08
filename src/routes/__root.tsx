@@ -57,6 +57,9 @@ export default function RootComponent() {
                   <Link
                     to="/contacts/$contactId"
                     params={{ contactId: contact.id }}
+                    activeProps={{
+                      className: "active",
+                    }}
                   >
                     {contact.first || contact.last ? (
                       <>
