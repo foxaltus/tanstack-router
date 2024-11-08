@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { createContact, getContacts } from "../contacts";
+import { useEffect } from "react";
 
 type SearchParams = {
   q?: string;
@@ -28,6 +29,12 @@ export default function RootComponent() {
   const contacts = Route.useLoaderData();
   const router = useRouter();
   const { status } = useRouterState();
+  const { q } = Route.useSearch();
+
+  useEffect(() => {
+    const input = document.getElementById("q") as HTMLInputElement;
+    input.value = q ?? "";
+  }, [q]);
 
   return (
     <>
@@ -49,6 +56,7 @@ export default function RootComponent() {
               placeholder="Search"
               type="search"
               name="q"
+              defaultValue={q}
             />
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
