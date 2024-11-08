@@ -59,7 +59,12 @@ export default function RootComponent() {
               defaultValue={q}
               className={searching ? "loading" : ""}
               onChange={(e) => {
-                router.navigate({ to: ".", search: { q: e.target.value } });
+                const isFirstSearch = q == null;
+                router.navigate({
+                  to: ".",
+                  search: { q: e.target.value },
+                  replace: !isFirstSearch,
+                });
               }}
             />
             <div id="search-spinner" aria-hidden hidden={!searching} />
