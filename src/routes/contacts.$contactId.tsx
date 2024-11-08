@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
-import { Contact, getContact } from "../contacts";
+import { Contact, deleteContact, getContact } from "../contacts";
 
 export const Route = createFileRoute("/contacts/$contactId")({
   component: RouteComponent,
@@ -61,10 +61,13 @@ function RouteComponent() {
           <form
             method="post"
             action="destroy"
-            onSubmit={(event) => {
-              if (!confirm("Please confirm you want to delete this record.")) {
-                event.preventDefault();
-              }
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!confirm("Please confirm you want to delete this record."))
+                return;
+              await deleteContact(contact.id);
+              // @ts-expect-error hold on, we'll be adding the index route soon
+              navigate({ to: "/" });
             }}
           >
             <button type="submit">Delete</button>
