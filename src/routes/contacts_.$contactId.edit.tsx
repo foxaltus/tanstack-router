@@ -69,7 +69,14 @@ function RouteComponent() {
       </label>
       <p>
         <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+        <button
+          type="button"
+          onClick={() => {
+            router.history.back();
+          }}
+        >
+          Cancel
+        </button>
       </p>
     </form>
   );
