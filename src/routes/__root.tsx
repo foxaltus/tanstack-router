@@ -37,8 +37,12 @@ export default function RootComponent() {
             method="post"
             onSubmit={async (e) => {
               e.preventDefault();
-              await createContact();
+              const contact = await createContact();
               router.invalidate();
+              router.navigate({
+                to: "/contacts/$contactId",
+                params: { contactId: contact.id },
+              });
             }}
           >
             <button type="submit">New</button>
