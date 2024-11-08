@@ -46,8 +46,6 @@ export default function RootComponent() {
             role="search"
             onSubmit={(e) => {
               e.preventDefault();
-              const q = new FormData(e.currentTarget).get("q") as string;
-              router.navigate({ to: ".", search: { q } });
             }}
           >
             <input
@@ -57,6 +55,9 @@ export default function RootComponent() {
               type="search"
               name="q"
               defaultValue={q}
+              onChange={(e) => {
+                router.navigate({ to: ".", search: { q: e.target.value } });
+              }}
             />
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
