@@ -80,7 +80,9 @@ function RouteComponent() {
 
 function Favorite({ contact }: { contact: Contact }) {
   const router = useRouter();
-  const favorite = contact.favorite;
+  const [favorite, setFavorite] = React.useState(contact.favorite);
+  React.useEffect(() => setFavorite(contact.favorite), [contact.favorite]);
+
   return (
     <form
       method="post"
@@ -98,6 +100,7 @@ function Favorite({ contact }: { contact: Contact }) {
               .value
           );
         const favorite = formData.get("favorite") === "true";
+        setFavorite(favorite);
         await updateContact(contact.id, { favorite });
         router.invalidate();
       }}
