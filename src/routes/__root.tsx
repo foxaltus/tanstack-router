@@ -22,14 +22,16 @@ export const Route = createRootRoute({
   loaderDeps: ({ search }) => ({
     q: search.q,
   }),
-  loader: ({ deps }) => getContacts(deps.q),
+  loader: ({ deps: { q } }) => {
+    const contacts = getContacts(q);
+    return { contacts, q };
+  },
 });
 
 export default function RootComponent() {
-  const contacts = Route.useLoaderData();
+  const { contacts, q } = Route.useLoaderData();
   const router = useRouter();
   const { status } = useRouterState();
-  const { q } = Route.useSearch();
 
   useEffect(() => {
     const input = document.getElementById("q") as HTMLInputElement;
