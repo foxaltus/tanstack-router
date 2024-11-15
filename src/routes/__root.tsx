@@ -22,8 +22,8 @@ export const Route = createRootRoute({
   loaderDeps: ({ search }) => ({
     q: search.q,
   }),
-  loader: ({ deps: { q } }) => {
-    const contacts = getContacts(q);
+  loader: async ({ deps: { q } }) => {
+    const contacts = await getContacts(q);
     return { contacts, q };
   },
 });
